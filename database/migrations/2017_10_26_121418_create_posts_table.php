@@ -18,7 +18,7 @@ class CreatePostsTable extends Migration
             $table->string('title');
             $table->string('alias')->unique();
             $table->text('content');
-            $table->integer('views')->unsigned();
+            $table->integer('views')->unsigned()->default(0);
             $table->string('status')->default('draft');
             $table->timestamps();
         });

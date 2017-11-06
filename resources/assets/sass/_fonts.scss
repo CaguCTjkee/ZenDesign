@@ -1,0 +1,17 @@
+@font-face {
+  font-family: 'GothamPro';
+  src: url($font-path + '/GothamPro/GothamPro/GothamPro.eot?') format('eot'),
+  url($font-path + '/GothamPro/GothamPro/GothamPro.otf') format('opentype'),
+  url($font-path + '/GothamPro/GothamPro/GothamPro.woff') format('woff'),
+  url($font-path + '/GothamPro/GothamPro/GothamPro.ttf') format('truetype'),
+  url($font-path + '/GothamPro/GothamPro/GothamPro.svg#GothamPro') format('svg');
+}
+
+@font-face {
+  font-family: 'GothamPro-Black';
+  src: url($font-path + '/GothamPro/GothamPro-Black/GothamPro-Black.eot?') format('eot'),
+  url($font-path + '/GothamPro/GothamPro-Black/GothamPro-Black.otf') format('opentype'),
+  url($font-path + '/GothamPro/GothamPro-Black/GothamPro-Black.woff') format('woff'),
+  url($font-path + '/GothamPro/GothamPro-Black/GothamPro-Black.ttf') format('truetype'),
+  url($font-path + '/GothamPro/GothamPro-Black/GothamPro-Black.svg#GothamPro-Black') format('svg');
+}

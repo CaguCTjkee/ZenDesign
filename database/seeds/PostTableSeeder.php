@@ -23,6 +23,7 @@ in collaborating with other designers and frontend developers.</p>';
 with strong coding skills. I believe what it’s my advantage
 because I understand full process and I have rich experience
 in collaborating with other designers and frontend developers.</p>';
+        $post->read_more = 'Read more';
         $post->views = 0;
         $post->status = 'Publish';
         $post->save();
@@ -39,6 +40,7 @@ in collaborating with other designers and frontend developers.</p>';
 with strong coding skills. I believe what it’s my advantage
 because I understand full process and I have rich experience
 in collaborating with other designers and frontend developers.</p>';
+        $post->read_more = 'Read more';
         $post->views = 0;
         $post->status = 'Publish';
         $post->save();
@@ -55,6 +57,7 @@ in collaborating with other designers and frontend developers.</p>';
 with strong coding skills. I believe what it’s my advantage
 because I understand full process and I have rich experience
 in collaborating with other designers and frontend developers.</p>';
+        $post->read_more = 'Read more';
         $post->views = 0;
         $post->status = 'Publish';
         $post->save();

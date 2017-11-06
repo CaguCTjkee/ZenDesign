@@ -11,7 +11,9 @@
 |
 */
 
-Auth::routes();
+Route::get('admin', 'LoginController@showLoginForm');
+Route::post('admin', 'LoginController@login')->name('admin');
+Route::post('logout', 'LoginController@logout');
 
 Route::get('/', 'MainController@home');
 

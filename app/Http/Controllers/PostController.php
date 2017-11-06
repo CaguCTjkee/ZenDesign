@@ -2,7 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
 
 class PostController extends Controller
 {
@@ -23,61 +28,130 @@ class PostController extends Controller
      */
     public function create()
     {
-        //
+        return view('posts.create', compact('post'));
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store()
     {
-        //
+        LoginController::checkAuth();
+
+        // validate
+        // read more on validation at http://laravel.com/docs/validation
+        $rules = array(
+            'title' => 'required',
+            'alias' => 'required|unique:posts',
+            'intro' => 'required',
+            'content' => 'required',
+            'status' => 'required',
+        );
+        $validator = Validator::make(Input::all(), $rules);
+
+        if( $validator->fails() )
+        {
+            return Redirect::to('posts/create')->withErrors($validator)->withInput();
+        }
+        else
+        {
+            $post = new Post();
+            $post->title = Input::get('title');
+            $post->alias = Input::get('alias');
+            $post->intro = Input::get('intro');
+            $post->content = Input::get('content');
+            $post->read_more = Input::get('read_more', 'Read more');
+            $post->views = 0;
+            $post->status = Input::get('status');
+
+            $post->save();
+
+            Session::flash('message', 'Successfully created post!');
+
+            return Redirect::to('/');
+        }
     }
 
     /**
+     *
      * Display the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Post $post
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function show($id)
+    public function show(Post $post)
     {
-        //
+        return view('posts.show', compact('post'));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Post $post
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function edit($id)
+    public function edit(Post $post)
     {
-        //
+        return view('posts.edit', compact('post'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param Post $post
+     *
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Post $post)
     {
-        //
+        LoginController::checkAuth();
+
+        // validate
+        // read more on validation at http://laravel.com/docs/validation
+        $rules = array(
+            'title' => 'required',
+            // todo-caguct: unique alias!
+            'alias' => 'required',
+            'intro' => 'required',
+            'content' => 'required',
+            'status' => 'required',
+        );
+        $validator = Validator::make(Input::all(), $rules);
+
+        if( $validator->fails() )
+        {
+            dd($validator);
+            return Redirect::to('posts/' . $post->alias . '/edit')->withErrors($validator)->withInput();
+        }
+        else
+        {
+            $post->title = Input::get('title');
+            $post->alias = Input::get('alias');
+            $post->intro = Input::get('intro');
+            $post->content = Input::get('content');
+            $post->read_more = Input::get('read_more', 'Read more');
+            $post->status = Input::get('status');
+
+            $post->save();
+
+            Session::flash('message', 'Successfully update post!');
+
+            return Redirect::to('posts/' . $post->alias . '/edit');
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  string $alias
+     *
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($alias)
     {
         //
     }
