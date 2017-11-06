@@ -4,15 +4,15 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Post extends Model
+class Tag extends Model
 {
     public function getRouteKeyName()
     {
         return 'alias';
     }
 
-    public function tags()
+    public function posts()
     {
-        return $this->belongsToMany('App\Tag')->withTimestamps();
+        return $this->belongsToMany('App\Post')->withTimestamps();
     }
 }

@@ -18,3 +18,5 @@ Route::post('logout', 'LoginController@logout');
 Route::get('/', 'MainController@home');
 
 Route::resource('/posts', 'PostController');
+
+Route::get('tag/{tag}', 'TagController@index');

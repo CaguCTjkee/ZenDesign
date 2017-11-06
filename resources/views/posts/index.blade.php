@@ -25,7 +25,7 @@
                     </div>
                 @endif
 
-                @foreach($data['posts'] as $post)
+                @foreach($posts as $post)
 
                     <div class="post col-12 {{ $post->status }}">
                         <div class="tags">
