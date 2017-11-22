@@ -43,7 +43,7 @@
 
                         <div class="form-group">
                             <label for="password">Password</label>
-                            <input type="password" class="form-control mx-sm-3" name="password">
+                            <input type="password" class="form-control mx-sm-3" name="password" autofocus>
                         </div>
 
                         <button class="btn btn-primary">

@@ -15,4 +15,21 @@ class Post extends Model
     {
         return $this->belongsToMany('App\Tag')->withTimestamps();
     }
+
+    public function tagsArray()
+    {
+        $tagsArray = [];
+
+        $tags = $this->tags()->get();
+
+        if( $tags )
+        {
+            foreach( $tags as $tag )
+            {
+                $tagsArray[$tag->alias] = $tag->title;
+            }
+        }
+
+        return $tagsArray;
+    }
 }

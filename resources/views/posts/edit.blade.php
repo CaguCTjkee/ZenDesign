@@ -82,6 +82,22 @@
                         </div>
 
                         <div class="form-group">
+                            <label for="tags">Tags</label>
+                            <div class="tags-list">
+                                <div class="tags-list-content clearfix">
+                                    @foreach($post->tagsArray() as $alias => $tag)
+                                        <div class="btn btn-sm btn-info tag">
+                                            <input type="hidden" name="tags[]" value="{{$tag}}">
+                                            {{$tag}}
+                                            <div class="badge badge-light remove">&times;</div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                                <input type="text" name="tags" id="tags" value="">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
                             <label for="read_more">Read more text</label>
                             <input type="text" name="read_more" id="read_more" class="form-control"
                                    value="{{ $post->read_more }}">

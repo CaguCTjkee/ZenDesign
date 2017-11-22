@@ -51,3 +51,44 @@ body {
     font-size: 50px;
   }
 }
+
+.tags-list {
+  padding: 0.375rem 0.75rem;
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  position: relative;
+
+  .tags-list-content {
+    display: inline-block;
+  }
+
+  input {
+    height: 31px;
+    background: none;
+    border: none;
+    outline: none;
+  }
+}
+
+.tags-offer {
+  min-width: 220px;
+  margin: 0;
+  padding: 0;
+  background: $gray-light;
+  border: 1px solid $gray;
+  border-radius: 3px;
+  position: absolute;
+  top: 2.75rem;
+  left: 0;
+  z-index: 20;
+
+  li {
+    display: block;
+    cursor: pointer;
+    font-size: .9rem;
+    padding: 5px 10px;
+    &:hover {
+      background: $gray-light-hover;
+    }
+  }
+}

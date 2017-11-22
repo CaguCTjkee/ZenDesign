@@ -19,4 +19,5 @@ Route::get('/', 'MainController@home');
 
 Route::resource('/posts', 'PostController');
 
-Route::get('tag/{tag}', 'TagController@index');
+Route::get('/tag/{tag}', 'TagController@index');
+Route::get('/json/tag-search', 'TagController@jsonSearch');
