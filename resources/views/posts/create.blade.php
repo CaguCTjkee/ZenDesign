@@ -64,7 +64,7 @@
 
                         <div class="form-group">
                             <label for="alias">Alias</label>
-                            <input type="text" name="alias" id="alias" class="form-control" value="">
+                            <input type="text" name="alias" id="alias" class="form-control live-translation" value="">
                         </div>
 
                         <div class="form-group">
@@ -75,6 +75,15 @@
                         <div class="form-group">
                             <label for="content">Content</label>
                             <textarea name="content" id="content" class="form-control simplemde"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="tags">Tags</label>
+                            <label class="tags-list">
+                                <div class="tags-list-content clearfix">
+                                </div>
+                                <input type="text" name="tags" id="tags" value="">
+                            </label>
                         </div>
 
                         <div class="form-group">

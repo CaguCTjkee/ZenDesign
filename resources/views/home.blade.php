@@ -8,8 +8,10 @@
 
             <div class="container">
                 <div class="row">
-                    <div class="alert alert-success">
-                        {{ session('message') }}
+                    <div class="col-12">
+                        <div class="alert alert-success">
+                            {{ session('message') }}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -30,7 +32,9 @@
                     <div class="post col-12 {{ $post->status }}">
                         <div class="tags">
                             @foreach($post->tags()->get() as $tag)
-                                <a href="/tag/{{ $tag->alias }}" class="badge badge-info"><i class="fa fa-tag" aria-hidden="true"></i> {{ $tag->title }}</a>
+                                <a href="/tag/{{ $tag->alias }}" class="badge badge-info"><i class="fa fa-tag"
+                                                                                             aria-hidden="true"></i> {{ $tag->title }}
+                                </a>
                             @endforeach
                         </div>
                         <div class="h4 title">

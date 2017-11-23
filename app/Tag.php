@@ -15,4 +15,36 @@ class Tag extends Model
     {
         return $this->belongsToMany('App\Post')->withTimestamps();
     }
+
+    /**
+     * @param array $get_tags
+     *
+     * @return array|bool
+     */
+    static function addTagsFromArray(array $get_tags)
+    {
+        if( $get_tags )
+        {
+            $tags = [];
+
+            foreach( $get_tags as $tag_title )
+            {
+                $tag = Tag::where('title', $tag_title)->orWhere('alias', $tag_title)->get()->first();
+                if( $tag === null )
+                {
+                    // Add tag
+                    $tag = new Tag();
+                    $tag->title = $tag_title;
+                    $tag->alias = \Slug::make($tag_title);
+                    $tag->save();
+                }
+                $tags[] = $tag;
+            }
+
+            if( $tags )
+                return $tags;
+        }
+
+        return false;
+    }
 }

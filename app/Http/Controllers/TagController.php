@@ -20,26 +20,4 @@ class TagController extends Controller
         return view('posts.index', compact('posts'));
     }
 
-    /**
-     * @param Request $request
-     */
-    public function jsonSearch(Request $request)
-    {
-        $data = [];
-        $tag = Input::get('tag');
-
-        if( !empty($tag) )
-        {
-            $getTag = Tag::where('title', 'like', $tag . '%')->get();
-            if( $getTag )
-            {
-                foreach( $getTag as $item )
-                {
-                    $data['tags'][] = $item->title;
-                }
-            }
-        }
-
-        return $data;
-    }
 }

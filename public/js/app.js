@@ -87,7 +87,7 @@ var tagsModule = function() {
 
     self.insertTag = function(tag) {
         var tagHtml = '<div class="btn btn-sm btn-info tag">\n' +
-            '<input type="hidden" name="tags[]" value="' + tag + '">\n' +
+            '<input type="hidden" name="tag[]" value="' + tag + '">\n' +
             '              ' + tag + '\n' +
             '              <div class="badge badge-light remove">&times;</div>\n' +
             '          </div>';
@@ -138,8 +138,28 @@ jQuery(function() {
     var simplemde = new SimpleMDE({element : jQuery(".simplemde")[0]});
 
     // live-title
-    jQuery(document.body).on('keyup', '.live-title', function() {
+    jQuery(document.body).on('input', '.live-title', function() {
         jQuery('.live-title-content').text('"' + jQuery(this).val() + '"');
+    });
+
+    // live-translation
+    jQuery(document.body).on('focusout', '.live-translation', function() {
+        var input = jQuery(this);
+        var value = input.val();
+
+        if(value !== '' && value.length > 2) {
+            jQuery.get({
+                url : '/json/live-translation',
+                data : {
+                    value : value
+                },
+                dataType : 'json'
+            }).done(function(data) {
+                if(typeof data.value !== "undefined" && data.value !== '') {
+                    input.val(data.value);
+                }
+            });
+        }
     });
 
     // tagsModule

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Post;
+use App\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
@@ -49,6 +50,12 @@ class PostController extends Controller
             'content' => 'required',
             'status' => 'required',
         );
+
+        // Prepere alias
+        Input::merge([
+            'alias' => $this->prepareAlias(Input::get('alias'))
+        ]);
+
         $validator = Validator::make(Input::all(), $rules);
 
         if( $validator->fails() )
@@ -67,6 +74,9 @@ class PostController extends Controller
             $post->status = Input::get('status');
 
             $post->save();
+
+            // Attach a tag to the post
+            $this->postTags(Input::get('tag'), $post);
 
             Session::flash('message', 'Successfully created post!');
 
@@ -96,6 +106,9 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
+        if( LoginController::isAdmin() === false )
+            return Redirect::to('/admin');
+
         return view('posts.edit', compact('post'));
     }
 
@@ -114,17 +127,21 @@ class PostController extends Controller
         // read more on validation at http://laravel.com/docs/validation
         $rules = array(
             'title' => 'required',
-            // todo-caguct: unique alias!
-            'alias' => 'required',
+            'alias' => 'required|unique:posts,alias,' . $post->id,
             'intro' => 'required',
             'content' => 'required',
             'status' => 'required',
         );
+
+        // Prepere alias
+        Input::merge([
+            'alias' => $this->prepareAlias(Input::get('alias'))
+        ]);
+
         $validator = Validator::make(Input::all(), $rules);
 
         if( $validator->fails() )
         {
-            dd($validator);
             return Redirect::to('posts/' . $post->alias . '/edit')->withErrors($validator)->withInput();
         }
         else
@@ -135,8 +152,10 @@ class PostController extends Controller
             $post->content = Input::get('content');
             $post->read_more = Input::get('read_more', 'Read more');
             $post->status = Input::get('status');
-
             $post->save();
+
+            // Attach a tag to the post
+            $this->postTags(Input::get('tag'), $post);
 
             Session::flash('message', 'Successfully update post!');
 
@@ -154,5 +173,42 @@ class PostController extends Controller
     public function destroy($alias)
     {
         //
+    }
+
+    /**
+     * Attach a tag to the post
+     *
+     * @param $tags
+     * @param Post $post
+     */
+    public function postTags($tags, Post $post)
+    {
+        if( $tags )
+        {
+            $tags = Tag::addTagsFromArray($tags);
+            if( $tags )
+            {
+                // Remove all tags from the post
+                $post->tags()->detach();
+
+                foreach( $tags as $tag )
+                {
+                    // Attach a tag to the post
+                    $post->tags()->attach($tag);
+                }
+            }
+        }
+    }
+
+    /**
+     * @param $alias
+     *
+     * @return string
+     */
+    public function prepareAlias($alias)
+    {
+        $alias = strtolower(\Slug::make($alias));
+
+        return $alias;
     }
 }

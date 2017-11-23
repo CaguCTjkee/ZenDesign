@@ -20,4 +20,7 @@ Route::get('/', 'MainController@home');
 Route::resource('/posts', 'PostController');
 
 Route::get('/tag/{tag}', 'TagController@index');
-Route::get('/json/tag-search', 'TagController@jsonSearch');
+
+// Json Api
+Route::get('/json/tag-search', 'JsonApiController@tagSearch');
+Route::get('/json/live-translation', 'JsonApiController@liveTranslation');

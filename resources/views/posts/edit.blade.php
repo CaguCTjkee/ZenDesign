@@ -66,7 +66,7 @@
 
                         <div class="form-group">
                             <label for="alias">Alias</label>
-                            <input type="text" name="alias" id="alias" class="form-control" value="{{ $post->alias }}">
+                            <input type="text" name="alias" id="alias" class="form-control live-translation" value="{{ $post->alias }}">
                         </div>
 
                         <div class="form-group">
@@ -83,18 +83,18 @@
 
                         <div class="form-group">
                             <label for="tags">Tags</label>
-                            <div class="tags-list">
+                            <label class="tags-list">
                                 <div class="tags-list-content clearfix">
                                     @foreach($post->tagsArray() as $alias => $tag)
                                         <div class="btn btn-sm btn-info tag">
-                                            <input type="hidden" name="tags[]" value="{{$tag}}">
+                                            <input type="hidden" name="tag[]" value="{{$tag}}">
                                             {{$tag}}
                                             <div class="badge badge-light remove">&times;</div>
                                         </div>
                                     @endforeach
                                 </div>
                                 <input type="text" name="tags" id="tags" value="">
-                            </div>
+                            </label>
                         </div>
 
                         <div class="form-group">
