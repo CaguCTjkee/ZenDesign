@@ -10,205 +10,225 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 
-class PostController extends Controller
-{
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
+class PostController extends Controller {
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        return view('posts.create', compact('post'));
-    }
+	/**
+	 * Display a listing of the resource.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function index()
+	{
+		//
+	}
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function store()
-    {
-        LoginController::checkAuth();
+	/**
+	 * Show the form for creating a new resource.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function create()
+	{
+		return view('posts.create', compact('post'));
+	}
 
-        // validate
-        // read more on validation at http://laravel.com/docs/validation
-        $rules = array(
-            'title' => 'required',
-            'alias' => 'required|unique:posts',
-            'intro' => 'required',
-            'content' => 'required',
-            'status' => 'required',
-        );
+	/**
+	 * Store a newly created resource in storage.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function store()
+	{
+		LoginController::checkAuth();
 
-        // Prepere alias
-        Input::merge([
-            'alias' => $this->prepareAlias(Input::get('alias'))
-        ]);
+		// validate
+		// read more on validation at http://laravel.com/docs/validation
+		$rules = array(
+			'title'   => 'required',
+			'alias'   => 'required|unique:posts',
+			'intro'   => 'required',
+			'content' => 'required',
+			'status'  => 'required',
+		);
 
-        $validator = Validator::make(Input::all(), $rules);
+		// Prepere alias
+		Input::merge([
+			'alias' => $this->prepareAlias(Input::get('alias')),
+		]);
 
-        if( $validator->fails() )
-        {
-            return Redirect::to('posts/create')->withErrors($validator)->withInput();
-        }
-        else
-        {
-            $post = new Post();
-            $post->title = Input::get('title');
-            $post->alias = Input::get('alias');
-            $post->intro = Input::get('intro');
-            $post->content = Input::get('content');
-            $post->read_more = Input::get('read_more', 'Read more');
-            $post->views = 0;
-            $post->status = Input::get('status');
+		$validator = Validator::make(Input::all(), $rules);
 
-            $post->save();
+		if( $validator->fails() )
+		{
+			return Redirect::to('posts/create')->withErrors($validator)->withInput();
+		}
+		else
+		{
+			$post            = new Post();
+			$post->title     = Input::get('title');
+			$post->alias     = Input::get('alias');
+			$post->intro     = Input::get('intro');
+			$post->content   = Input::get('content');
+			$post->read_more = Input::get('read_more', 'Read more');
+			$post->views     = 0;
+			$post->status    = Input::get('status');
 
-            // Attach a tag to the post
-            $this->postTags(Input::get('tag'), $post);
+			$post->save();
 
-            Session::flash('message', 'Successfully created post!');
+			// Attach a tag to the post
+			$this->postTags(Input::get('tag'), $post);
 
-            return Redirect::to('/');
-        }
-    }
+			Session::flash('message', 'Successfully created post!');
 
-    /**
-     *
-     * Display the specified resource.
-     *
-     * @param Post $post
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function show(Post $post)
-    {
-        return view('posts.show', compact('post'));
-    }
+			return Redirect::to('/');
+		}
+	}
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param Post $post
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function edit(Post $post)
-    {
-        if( LoginController::isAdmin() === false )
-            return Redirect::to('/admin');
+	/**
+	 *
+	 * Display the specified resource.
+	 *
+	 * @param Post $post
+	 *
+	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+	 */
+	public function show(Post $post)
+	{
+		// Views
+		$post->addView();
 
-        return view('posts.edit', compact('post'));
-    }
+		if( $post->status !== 'publish' )
+		{
+			LoginController::checkAuth();
+		}
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param Post $post
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Post $post)
-    {
-        LoginController::checkAuth();
+		return view('posts.show', compact('post'));
+	}
 
-        // validate
-        // read more on validation at http://laravel.com/docs/validation
-        $rules = array(
-            'title' => 'required',
-            'alias' => 'required|unique:posts,alias,' . $post->id,
-            'intro' => 'required',
-            'content' => 'required',
-            'status' => 'required',
-        );
+	/**
+	 * Show the form for editing the specified resource.
+	 *
+	 * @param Post $post
+	 *
+	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+	 */
+	public function edit(Post $post)
+	{
+		if( LoginController::isAdmin() === false )
+		{
+			return Redirect::to('/admin');
+		}
 
-        // Prepere alias
-        Input::merge([
-            'alias' => $this->prepareAlias(Input::get('alias'))
-        ]);
+		return view('posts.edit', compact('post'));
+	}
 
-        $validator = Validator::make(Input::all(), $rules);
+	/**
+	 * Update the specified resource in storage.
+	 *
+	 * @param Post $post
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function update(Post $post)
+	{
+		LoginController::checkAuth();
 
-        if( $validator->fails() )
-        {
-            return Redirect::to('posts/' . $post->alias . '/edit')->withErrors($validator)->withInput();
-        }
-        else
-        {
-            $post->title = Input::get('title');
-            $post->alias = Input::get('alias');
-            $post->intro = Input::get('intro');
-            $post->content = Input::get('content');
-            $post->read_more = Input::get('read_more', 'Read more');
-            $post->status = Input::get('status');
-            $post->save();
+		// validate
+		// read more on validation at http://laravel.com/docs/validation
+		$rules = array(
+			'title'   => 'required',
+			'alias'   => 'required|unique:posts,alias,' . $post->id,
+			'intro'   => 'required',
+			'content' => 'required',
+			'status'  => 'required',
+		);
 
-            // Attach a tag to the post
-            $this->postTags(Input::get('tag'), $post);
+		// Prepere alias
+		Input::merge([
+			'alias' => $this->prepareAlias(Input::get('alias')),
+		]);
 
-            Session::flash('message', 'Successfully update post!');
+		$validator = Validator::make(Input::all(), $rules);
 
-            return Redirect::to('posts/' . $post->alias . '/edit');
-        }
-    }
+		if( $validator->fails() )
+		{
+			return Redirect::to('posts/' . $post->alias . '/edit')->withErrors($validator)->withInput();
+		}
+		else
+		{
+			$post->title     = Input::get('title');
+			$post->alias     = Input::get('alias');
+			$post->intro     = Input::get('intro');
+			$post->content   = Input::get('content');
+			$post->read_more = Input::get('read_more', 'Read more');
+			$post->status    = Input::get('status');
+			$post->save();
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  string $alias
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($alias)
-    {
-        //
-    }
+			// Attach a tag to the post
+			$this->postTags(Input::get('tag'), $post);
 
-    /**
-     * Attach a tag to the post
-     *
-     * @param $tags
-     * @param Post $post
-     */
-    public function postTags($tags, Post $post)
-    {
-        if( $tags )
-        {
-            $tags = Tag::addTagsFromArray($tags);
-            if( $tags )
-            {
-                // Remove all tags from the post
-                $post->tags()->detach();
+			Session::flash('message', 'Successfully update post!');
 
-                foreach( $tags as $tag )
-                {
-                    // Attach a tag to the post
-                    $post->tags()->attach($tag);
-                }
-            }
-        }
-    }
+			return Redirect::to('posts/' . $post->alias . '/edit');
+		}
+	}
 
-    /**
-     * @param $alias
-     *
-     * @return string
-     */
-    public function prepareAlias($alias)
-    {
-        $alias = strtolower(\Slug::make($alias));
+	/**
+	 * Remove the specified resource from storage.
+	 *
+	 * @param Post $post
+	 *
+	 * @return mixed
+	 * @throws \Exception
+	 */
+	public function destroy(Post $post)
+	{
+		LoginController::checkAuth();
 
-        return $alias;
-    }
+		$post->delete();
+
+		Session::flash('message', 'Successfully delete post!');
+
+		return Redirect::to('/');
+	}
+
+	/**
+	 * Attach a tag to the post
+	 *
+	 * @param      $tags
+	 * @param Post $post
+	 */
+	public function postTags($tags, Post $post)
+	{
+		if( $tags )
+		{
+			$tags = Tag::addTagsFromArray($tags);
+			if( $tags )
+			{
+				// Remove all tags from the post
+				$post->tags()->detach();
+
+				foreach( $tags as $tag )
+				{
+					// Attach a tag to the post
+					$post->tags()->attach($tag);
+				}
+
+				// Update all tags frequency
+				Tag::tagsUpdateFrequency();
+			}
+		}
+	}
+
+	/**
+	 * @param $alias
+	 *
+	 * @return string
+	 */
+	public function prepareAlias($alias)
+	{
+		$alias = strtolower(\Slug::make($alias));
+
+		return $alias;
+	}
 }

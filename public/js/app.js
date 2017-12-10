@@ -135,7 +135,9 @@ var tagsModule = function() {
 }
 
 jQuery(function() {
-    var simplemde = new SimpleMDE({element : jQuery(".simplemde")[0]});
+
+    if(jQuery('.simplemde').length > 0)
+        var simplemde = new SimpleMDE({element : jQuery('.simplemde')[0]});
 
     // live-title
     jQuery(document.body).on('input', '.live-title', function() {
@@ -165,5 +167,21 @@ jQuery(function() {
     // tagsModule
     var tags = new tagsModule();
     tags.init();
+
+    // Save as draft
+    jQuery(document.body).on('click', '.save-as', function(e) {
+        e.preventDefault();
+
+        var self = jQuery(this);
+        var form = self.closest('form');
+
+        if(self.hasClass('save-draft')) {
+            form.find('select[name="status"]').val('draft');
+        } else {
+            form.find('select[name="status"]').val('publish');
+        }
+
+        form.submit();
+    });
 
 });

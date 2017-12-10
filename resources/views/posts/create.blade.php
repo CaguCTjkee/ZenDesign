@@ -80,8 +80,7 @@
                         <div class="form-group">
                             <label for="tags">Tags</label>
                             <label class="tags-list">
-                                <div class="tags-list-content clearfix">
-                                </div>
+                                <div class="tags-list-content clearfix"></div>
                                 <input type="text" name="tags" id="tags" value="">
                             </label>
                         </div>
@@ -91,7 +90,7 @@
                             <input type="text" name="read_more" id="read_more" class="form-control" value="Read more">
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group hidden">
                             <label for="status">Status</label>
                             <select name="status" id="status" class="form-control">
                                 <option value="publish">Publish</option>
@@ -99,8 +98,8 @@
                             </select>
                         </div>
 
-                        <button class="btn btn-success" type="submit">Save</button>
-
+                        <button class="btn btn-success save-as save-publish" type="submit">Publish</button>
+                        <button class="btn btn-dark save-as save-draft" type="submit">Save as Draft</button>
                     </form>
                 </div>
 

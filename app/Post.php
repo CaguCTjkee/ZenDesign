@@ -4,32 +4,38 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Post extends Model
-{
-    public function getRouteKeyName()
-    {
-        return 'alias';
-    }
+class Post extends Model {
 
-    public function tags()
-    {
-        return $this->belongsToMany('App\Tag')->withTimestamps();
-    }
+	public function getRouteKeyName()
+	{
+		return 'alias';
+	}
 
-    public function tagsArray()
-    {
-        $tagsArray = [];
+	public function tags()
+	{
+		return $this->belongsToMany('App\Tag')->withTimestamps();
+	}
 
-        $tags = $this->tags()->get();
+	public function tagsArray()
+	{
+		$tagsArray = [];
 
-        if( $tags )
-        {
-            foreach( $tags as $tag )
-            {
-                $tagsArray[$tag->alias] = $tag->title;
-            }
-        }
+		$tags = $this->tags()->get();
 
-        return $tagsArray;
-    }
+		if( $tags )
+		{
+			foreach( $tags as $tag )
+			{
+				$tagsArray[$tag->alias] = $tag->title;
+			}
+		}
+
+		return $tagsArray;
+	}
+
+	public function addView()
+	{
+		$this->views = ++ $this->views;
+		$this->save();
+	}
 }

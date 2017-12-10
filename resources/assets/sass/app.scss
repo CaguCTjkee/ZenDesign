@@ -10,6 +10,10 @@ body {
   cursor: pointer;
 }
 
+.hidden {
+  display: none;
+}
+
 .mw-385 {
   max-width: 385px;
 }
@@ -41,7 +45,7 @@ body {
   margin: 30px 0;
   &.draft {
     color: $draft-color;
-    a:not(.btn) {
+    a:not(.btn):not(.badge) {
       color: $draft-color;
     }
   }

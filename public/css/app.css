@@ -10,6 +10,9 @@ body {
 .btn {
   cursor: pointer; }
 
+.hidden {
+  display: none; }
+
 .mw-385 {
   max-width: 385px; }
 
@@ -36,7 +39,7 @@ body {
   margin: 30px 0; }
   .post.draft {
     color: #5a5a5a; }
-    .post.draft a:not(.btn) {
+    .post.draft a:not(.btn):not(.badge) {
       color: #5a5a5a; }
   .post .title {
     font-family: "GothamPro-Black", sans-serif;

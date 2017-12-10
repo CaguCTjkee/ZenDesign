@@ -52,7 +52,13 @@
 
                 <div class="col-12 mb-5">
 
-                    <h1 class="display-4">Edit <span class="live-title-content">"{{ $post->title }}"</span></h1>
+                    <h1 class="display-4">
+                        Edit
+                        @if( $post->status == 'draft' )
+                            Draft
+                        @endif()
+                        <span class="live-title-content">"{{ $post->title }}"</span>
+                    </h1>
 
                     <form action="{{ route('posts.update', $post->alias) }}" method="POST">
                         {{ csrf_field() }}
@@ -66,7 +72,8 @@
 
                         <div class="form-group">
                             <label for="alias">Alias</label>
-                            <input type="text" name="alias" id="alias" class="form-control live-translation" value="{{ $post->alias }}">
+                            <input type="text" name="alias" id="alias" class="form-control live-translation"
+                                   value="{{ $post->alias }}">
                         </div>
 
                         <div class="form-group">
@@ -103,7 +110,7 @@
                                    value="{{ $post->read_more }}">
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group hidden">
                             <label for="status">Status</label>
                             <select name="status" id="status" class="form-control">
                                 <option value="publish">Publish</option>
@@ -111,7 +118,16 @@
                             </select>
                         </div>
 
-                        <button class="btn btn-success" type="submit">Save</button>
+                        <button class="btn btn-danger float-right" onclick="getElementById('destroy').submit()"
+                                type="button">Delete
+                        </button>
+
+                        <button class="btn btn-success save-as save-publish" type="submit">Publish</button>
+                        <button class="btn btn-dark save-as save-draft" type="submit">Save as Draft</button>
+                    </form>
+                    <form action="{{ route('posts.destroy', $post->alias) }}" method="POST" id="destroy">
+                        {{ csrf_field() }}
+                        <input type="hidden" name="_method" value="DELETE">
                     </form>
                 </div>
 
